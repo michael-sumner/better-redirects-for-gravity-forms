@@ -86,14 +86,6 @@ No, this does not work for external URLs. **Better Redirects for Gravity Forms**
 
 Yes, please visit the [GitHub repository link](https://github.com/michael-sumner/better-redirects-for-gravity-forms). Contributions for improvements are always welcome.
 
-== Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
-
 == Changelog ==
 
 Please visit the [GitHub repository link](https://github.com/michael-sumner/better-redirects-for-gravity-forms) for the changelog.
