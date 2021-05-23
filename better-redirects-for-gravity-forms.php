@@ -13,87 +13,91 @@
  * License: GPL-2.0+
  * Text Domain: better-redirects-for-gravity-forms
  * Domain Path: /languages
- * 
+ *
  * @link https://www.micsumner.com/
  * @since 1.0.0
  * @package BetterRedirectsGF
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die( 'Hey there...' );
+if (! defined('WPINC')) {
+    die('Hey there...');
 }
 
-define( 'BETTER_REDIRECTS_GF_VERSION', '1.0.0' );
+define('BETTER_REDIRECTS_GF_VERSION', '1.0.0');
 
 class BetterRedirectsGF
 {
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since 1.0.0 Better Redirects for Gravity Forms
-	 * @access protected
-	 * @var string $version The current version of the plugin.
-	 */
-	protected $version;
-
-	/**
-	 * Define the core functionality of the plugin.
-	 *
-	 * Set the plugin version that can be used throughout the plugin.
-	 * Set the hooks.
-	 *
-	 * @since 1.0.0 Better Redirects for Gravity Forms
-	 */
-	public function __construct() {
-		if ( defined( 'BETTER_REDIRECTS_GF_VERSION' ) ) {
-			$this->version = BETTER_REDIRECTS_GF_VERSION;
-		} else {
-			$this->version = '1.0.0';
-		}
-
-		// Activate hooks
-		$this->activate_actions();
-		$this->activate_filters();
-	}
-
-	/**
-	 * Register listeners for actions.
-     * 
-	 * @since 1.0.0 Better Redirects for Gravity Forms
-	 * @return void
-	 */
-	private function activate_actions() {
-        add_action('save_post', array( $this, 'update_url' ), 10, 3);
-        add_action('admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10);
-        add_action('wp_ajax_better_redirects_gf', array( $this, 'get_post_id_from_url' ));
-        add_action('wp_ajax_nopriv_better_redirects_gf', array( $this, 'get_post_id_from_url' ));
-	}
-
-	/**
-	 * Register listeners for filters.
-	 *
+    /**
+     * The current version of the plugin.
+     *
      * @since 1.0.0 Better Redirects for Gravity Forms
-	 * @return void
-	 */
-	private function activate_filters() {
-        add_filter('gform_confirmation_ui_settings', array( $this, 'confirmation_setting' ), 10, 3);
-        add_filter('gform_pre_confirmation_save', array( $this, 'confirmation_save' ), 10, 2);
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since 1.0.0 Better Redirects for Gravity Forms
-	 * @return string The version number of the plugin.
-	 */
-	public function get_version() {
-		return $this->version;
-	}
+     * @access protected
+     * @var string $version The current version of the plugin.
+     */
+    protected $version;
 
     /**
-     * Add plugin HTML to Gravity forms form confirmation settings. 
-     * 
+     * Define the core functionality of the plugin.
+     *
+     * Set the plugin version that can be used throughout the plugin.
+     * Set the hooks.
+     *
+     * @since 1.0.0 Better Redirects for Gravity Forms
+     */
+    public function __construct()
+    {
+        if (defined('BETTER_REDIRECTS_GF_VERSION')) {
+            $this->version = BETTER_REDIRECTS_GF_VERSION;
+        } else {
+            $this->version = '1.0.0';
+        }
+
+        // Activate hooks
+        $this->activate_actions();
+        $this->activate_filters();
+    }
+
+    /**
+     * Register listeners for actions.
+     *
+     * @since 1.0.0 Better Redirects for Gravity Forms
+     * @return void
+     */
+    private function activate_actions()
+    {
+        add_action('save_post', array($this, 'update_url'), 10, 3);
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'), 10);
+        add_action('wp_ajax_better_redirects_gf', array($this, 'get_post_id_from_url'));
+        add_action('wp_ajax_nopriv_better_redirects_gf', array($this, 'get_post_id_from_url'));
+    }
+
+    /**
+     * Register listeners for filters.
+     *
+     * @since 1.0.0 Better Redirects for Gravity Forms
+     * @return void
+     */
+    private function activate_filters()
+    {
+        add_filter('gform_confirmation_ui_settings', array($this, 'confirmation_setting'), 10, 3);
+        add_filter('gform_pre_confirmation_save', array($this, 'confirmation_save'), 10, 2);
+    }
+
+    /**
+     * Retrieve the version number of the plugin.
+     *
+     * @since 1.0.0 Better Redirects for Gravity Forms
+     * @return string The version number of the plugin.
+     */
+    public function get_version()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Add plugin HTML to Gravity forms form confirmation settings.
+     *
      * @since 1.0.0 Better Redirects for Gravity Forms
      * @param mixed $ui_settings
      * @param mixed $confirmation
@@ -117,8 +121,7 @@ class BetterRedirectsGF
             $post_url = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
         }
 
-        ob_start();
-        ?>
+        ob_start(); ?>
         <tr>
             <td>
                 <div class="gform-settings-field">
@@ -148,7 +151,7 @@ class BetterRedirectsGF
 
     /**
      * Modify form confirmation redirect URL, from plugin options array.
-     * 
+     *
      * @since 1.0.0 Better Redirects for Gravity Forms
      * @param mixed $confirmation
      * @param mixed $form
@@ -157,8 +160,8 @@ class BetterRedirectsGF
     public function confirmation_save($confirmation, $form)
     {
         // vars
-        $form_id = $form['id'];
-        $cid     = $confirmation['id'];
+        $form_id         = $form['id'];
+        $confirmation_id = $confirmation['id'];
 
         // todo save values for later, until gform_confirmation_settings_fields filter issue can be resolved.
         // todo the issue is that newly appended confirmation type radio is not set as checked=checked.
@@ -166,17 +169,14 @@ class BetterRedirectsGF
         $confirmation['betterRedirectsGf-field-value-post-url'] = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
 
         // update plugin options.
-        
         $form_confirmations = $form['confirmations'];
 
         foreach ($form_confirmations as $key => $value) {
-            if($key === $cid) {
+            if ($key === $confirmation_id) {
                 $form_confirmations[$key]['betterRedirectsGf-field-value-post-id']  = $confirmation['betterRedirectsGf-field-value-post-id'];
                 $form_confirmations[$key]['betterRedirectsGf-field-value-post-url'] = $confirmation['betterRedirectsGf-field-value-post-url'];
             }
         }
-
-        update_option( 'better_redirects_gf', array());
 
         if (!get_option('better_redirects_gf')) {
             $better_redirects_gf_option = array(
@@ -185,13 +185,12 @@ class BetterRedirectsGF
                     'confirmations' => $form_confirmations,
                 ),
             );
-            add_option( 'better_redirects_gf', $better_redirects_gf_option);
-            update_option('better_redirects_gf', $better_redirects_gf_option);
+            add_option('better_redirects_gf', $better_redirects_gf_option);
         } else {
             $better_redirects_gf_option = get_option('better_redirects_gf');
             $form_exists_in_option = false;
             foreach ($better_redirects_gf_option as $key => $value) {
-                if($form_id === $value['form_id']) {
+                if ($form_id === $value['form_id']) {
                     $form_exists_in_option = true;
                 }
             }
@@ -200,7 +199,7 @@ class BetterRedirectsGF
                 $better_redirects_gf_option[] = array(
                     'form_id'       => $form_id,
                     'confirmations' => $form_confirmations,
-                );
+               );
             }
             update_option('better_redirects_gf', $better_redirects_gf_option);
         }
@@ -210,7 +209,7 @@ class BetterRedirectsGF
 
     /**
      * Check if URL has changed, then update it within options.
-     * 
+     *
      * @since 1.0.0 Better Redirects for Gravity Forms
      * @param int $post_id
      * @param mixed $post
@@ -219,9 +218,8 @@ class BetterRedirectsGF
      */
     public function update_url($post_id, $post, $update)
     {
-
         // only accept posts that are having URLs modified.
-        if(!$update) {
+        if (!$update) {
             return;
         }
 
@@ -229,23 +227,28 @@ class BetterRedirectsGF
 
         // check if $post_id is the same in the form.
         if (get_option('better_redirects_gf')) {
+            // vars
             $better_redirects_gf_option = get_option('better_redirects_gf');
 
             foreach ($better_redirects_gf_option as $key => $value) {
+                // vars
                 $confirmations = $value['confirmations'];
                 $form_id       = $value['form_id'];
-                $form          = GFFormsModel::get_form_meta( $form_id );
+                $form          = GFFormsModel::get_form_meta($form_id);
                 
                 // loop within each confirmations, and update the urls given post_id
                 foreach ($confirmations as $confirmation_id => $confirmation) {
+                    // vars
                     $confirmation_post_id = intval($confirmation['betterRedirectsGf-field-value-post-id']);
-                    if($post_id === $confirmation_post_id) {
+
+                    if ($post_id === $confirmation_post_id) {
                         $form['confirmations'][$confirmation_id]['betterRedirectsGf-field-value-post-url'] = $url;
-                        $form['confirmations'][$confirmation_id]['url'] = $url;
-                        GFFormsModel::update_form_meta( $form_id, $form['confirmations'], 'confirmations' );
+                        $form['confirmations'][$confirmation_id]['url']                                    = $url;
+
+                        GFFormsModel::update_form_meta($form_id, $form['confirmations'], 'confirmations');
 
                         $better_redirects_gf_option[$key]['confirmations'][$confirmation_id]['betterRedirectsGf-field-value-post-url'] = $url;
-                        $better_redirects_gf_option[$key]['confirmations'][$confirmation_id]['url'] = $url;
+                        $better_redirects_gf_option[$key]['confirmations'][$confirmation_id]['url']                                    = $url;
                     }
                 }
             }
@@ -255,13 +258,15 @@ class BetterRedirectsGF
 
     /**
      * Enqueue admin scripts.
-     * 
+     *
      * @since 1.0.0 Better Redirects for Gravity Forms
      * @return void
      */
     public function enqueue_scripts()
     {
+        // vars
         $current_screen  = get_current_screen();
+
         if ('toplevel_page_gf_edit_forms' !== $current_screen->id) {
             return;
         }
@@ -270,23 +275,23 @@ class BetterRedirectsGF
         wp_localize_script('better_redirects_gf', 'better_redirects_gf', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('better_redirects_gf_nonce'),
-        ));
+       ));
     }
 
     /**
      * Ajax. Get Post ID from URL.
-     * 
+     *
      * @since 1.0.0 Better Redirects for Gravity Forms
      * @return mixed $data
      */
-    function get_post_id_from_url()
+    public function get_post_id_from_url()
     {
         check_ajax_referer('better_redirects_gf_nonce');
 
         $data = array(
             'debug_message' => '',
             'post_id'       => 0,
-        );
+       );
 
         if (!isset($_POST['post_url'])) {
             $data['debug_message'] = __('post_url does not exist.', 'better-redirects-for-gravity-forms');
