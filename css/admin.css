@@ -1,0 +1,13 @@
+.gform-settings__wrapper .button.c-betterRedirectsGf-result__button {
+    height: auto;
+    padding-left: .7em;
+    padding-right: .7em;
+}
+.gform-settings__wrapper .c-betterRedirectsGf-result__input {
+    height: auto;
+    padding-left: .7em;
+    padding-right: .7em;
+    margin-left: .7em;
+    margin-right: .7em;
+    display: inline-block;
+}
