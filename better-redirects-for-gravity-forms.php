@@ -3,7 +3,6 @@
 /**
  * @wordpress-plugin
  * Plugin Name: Better Redirects for Gravity Forms
- * Plugin URI: https://www.micsumner.com/
  * Description: Avoids 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
  * Version: 1.0.0
  * Requires at least: 4.0
@@ -179,6 +178,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 }
             }
     
+            // todo find a way to access each form using GF API, and if it's more performant.
             if (!get_option('better_redirects_gf')) {
                 $better_redirects_gf_option = array(
                     array(
@@ -189,10 +189,13 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 add_option('better_redirects_gf', $better_redirects_gf_option);
             } else {
                 $better_redirects_gf_option = get_option('better_redirects_gf');
-                $form_exists_in_option = false;
+                $form_exists_in_option      = false;
                 foreach ($better_redirects_gf_option as $key => $value) {
                     if ($form_id === $value['form_id']) {
                         $form_exists_in_option = true;
+
+                        // update form array.
+                        $better_redirects_gf_option[$key]['confirmations'] = $form_confirmations;
                     }
                 }
                 if (!$form_exists_in_option) {
@@ -219,7 +222,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
          */
         public function update_url($post_id, $post, $update)
         {
-            // only accept posts that are having URLs modified.
+            // only accept posts that are having their URLs modified.
             if (!$update) {
                 return;
             }
