@@ -114,11 +114,11 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
             $post_id  = rgar($confirmation, 'betterRedirectsGf-field-value-post-id');
             $post_url = rgar($confirmation, 'betterRedirectsGf-field-value-post-url');
     
-            if (isset($_POST['_gform_setting_betterRedirectsGf-field-value-post-id'])) {
+            if (isset(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-id']))) {
                 $post_id = rgpost('_gform_setting_betterRedirectsGf-field-value-post-id');
             }
     
-            if (isset($_POST['_gform_setting_betterRedirectsGf-field-value-post-url'])) {
+            if (isset(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-url']))) {
                 $post_url = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
             }
     
@@ -134,11 +134,11 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                             <p>
                             <div class="gform-button c-betterRedirectsGf-result js-c-betterRedirectsGf-result gform-visually-hidden">
                                 <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--create"></span>
-                                <span class="c-betterRedirectsGf-result__input"><span>Your redirect is now set to <strong>ID <span class="js-c-betterRedirectsGf-result-id"><?php echo $post_id; ?></span></strong>:&nbsp;</span><a href="" class="js-c-betterRedirectsGf-result-url" target="_blank"><?php echo $post_url; ?></a></span>
+                                <span class="c-betterRedirectsGf-result__input"><span>Your redirect is now set to <strong>ID <span class="js-c-betterRedirectsGf-result-id"><?php echo esc_html($post_id); ?></span></strong>:&nbsp;</span><a href="" class="js-c-betterRedirectsGf-result-url" target="_blank"><?php echo esc_url($post_url); ?></a></span>
                                 <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--delete js-c-betterRedirectsGf-result-remove"></span>
                             </div>
-                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-id" id="betterRedirectsGf-field-value-post-id" value="<?php echo $post_id; ?>" _gform_setting="">
-                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo $post_url; ?>" _gform_setting="">
+                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-id" id="betterRedirectsGf-field-value-post-id" value="<?php echo esc_attr($post_id); ?>" _gform_setting="">
+                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo esc_attr($post_url); ?>" _gform_setting="">
                             </p>
                             <a href="javascript:void(0);" class="gform_settings_button button js-c-betterRedirectsGf-button-selectLink">Select Link</a>
                         </div>
@@ -161,8 +161,8 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         public function confirmation_save($confirmation, $form)
         {
             // vars
-            $form_id         = $form['id'];
-            $confirmation_id = $confirmation['id'];
+            $form_id         = (int) $form['id'];
+            $confirmation_id = (int) $confirmation['id'];
     
             // todo save values for later, until gform_confirmation_settings_fields filter issue can be resolved.
             // todo the issue is that newly appended confirmation type radio is not set as checked=checked.
@@ -224,7 +224,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 return;
             }
     
-            $url = get_permalink($post_id);
+            $url = esc_url(get_permalink($post_id));
     
             // check if $post_id is the same in the form.
             if (get_option('better_redirects_gf')) {
@@ -294,14 +294,14 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 'post_id'       => 0,
            );
     
-            if (!isset($_POST['post_url'])) {
+            if (!isset(sanitize_text_field($_POST['post_url']))) {
                 $data['debug_message'] = __('post_url does not exist.', 'better-redirects-for-gravity-forms');
                 wp_send_json_error($data);
             }
     
             // vars
-            $post_url = $_POST['post_url'];
-            $post_id  = url_to_postid($post_url);
+            $post_url = sanitize_text_field($_POST['post_url']);
+            $post_id  = (int) url_to_postid(esc_url($post_url));
     
             if (!$post_id) {
                 $data['debug_message'] = __('post_id does not exist.', 'better-redirects-for-gravity-forms');
