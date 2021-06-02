@@ -113,11 +113,11 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
             $post_id  = rgar($confirmation, 'betterRedirectsGf-field-value-post-id');
             $post_url = rgar($confirmation, 'betterRedirectsGf-field-value-post-url');
     
-            if (isset(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-id']))) {
+            if (!empty(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-id']))) {
                 $post_id = rgpost('_gform_setting_betterRedirectsGf-field-value-post-id');
             }
     
-            if (isset(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-url']))) {
+            if (!empty(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-url']))) {
                 $post_url = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
             }
     
@@ -297,7 +297,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 'post_id'       => 0,
            );
     
-            if (!isset(sanitize_text_field($_POST['post_url']))) {
+            if (empty(sanitize_text_field($_POST['post_url']))) {
                 $data['debug_message'] = __('post_url does not exist.', 'better-redirects-for-gravity-forms');
                 wp_send_json_error($data);
             }
