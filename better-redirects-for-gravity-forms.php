@@ -3,7 +3,7 @@
 /**
  * @wordpress-plugin
  * Plugin Name: Better Redirects for Gravity Forms
- * Description: Avoids 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
+ * Description: Avoid 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
  * Version: 1.0.0
  * Requires at least: 4.0
  * Requires PHP: 5.6

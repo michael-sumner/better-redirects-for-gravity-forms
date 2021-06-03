@@ -35,7 +35,7 @@ Avoids 404 errors in your form confirmation redirects. Specify your confirmation
 
 #### Plugin support is readily available
 
-* You can contact the plugin developer through the **Better Redirects for Gravity Forms** [Support forums](https://wordpress.org/support/plugin/better-redirects-gf/) for questions and issues you might have.
+* You can contact the plugin developer through the **Better Redirects for Gravity Forms** [Support forums](https://wordpress.org/support/plugin/better-redirects-for-gravity-forms/) for questions and issues you might have.
 
 #### How is this plugin useful?
 
@@ -58,7 +58,7 @@ Avoids 404 errors in your form confirmation redirects. Specify your confirmation
 
 #### Support
 
-* You can contact the plugin developer through the **Better Redirects for Gravity Forms** [Support forums](https://wordpress.org/support/plugin/better-redirects-gf/) for questions and issues you might have.
+* You can contact the plugin developer through the **Better Redirects for Gravity Forms** [Support forums](https://wordpress.org/support/plugin/better-redirects-for-gravity-forms/) for questions and issues you might have.
 
 ### Privacy Policy
 
@@ -80,7 +80,7 @@ Alternatively you can download the plugin using the download button on this page
 
 = Does this work for external URLs? =
 
-No, this does not work for external URLs. **Better Redirects for Gravity Forms** will have no trace that the external URL has been modified. If you require this feature, please submit it as a **customisation request** within the [Support forums](https://wordpress.org/support/plugin/better-redirects-gf/).
+No, this does not work for external URLs. **Better Redirects for Gravity Forms** will have no trace that the external URL has been modified. If you require this feature, please submit it as a **customisation request** within the [Support forums](https://wordpress.org/support/plugin/better-redirects-for-gravity-forms/).
 
 = Can I see your code? =
 
