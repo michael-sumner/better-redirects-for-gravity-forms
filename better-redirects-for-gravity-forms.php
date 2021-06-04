@@ -4,7 +4,7 @@
  * @wordpress-plugin
  * Plugin Name: Better Redirects for Gravity Forms
  * Description: Avoid 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
  * Author: Michael Bryan Sumner
@@ -14,7 +14,7 @@
  * Domain Path: /languages
  *
  * @link https://www.micsumner.com/
- * @since 1.0.0
+ * @since 1.1.0
  * @package BetterRedirectsGF
  */
 
@@ -23,7 +23,7 @@ if (! defined('WPINC')) {
     die('Hey there...');
 }
 
-define('BETTER_REDIRECTS_GF_VERSION', '1.0.0');
+define('BETTER_REDIRECTS_GF_VERSION', '1.1.0');
 
 if ( ! class_exists( 'BetterRedirectsGF' ) ) {
     class BetterRedirectsGF
@@ -31,7 +31,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * The current version of the plugin.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @access protected
          * @var string $version The current version of the plugin.
          */
@@ -43,14 +43,14 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
          * Set the plugin version that can be used throughout the plugin.
          * Set the hooks.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          */
         public function __construct()
         {
             if (defined('BETTER_REDIRECTS_GF_VERSION')) {
                 $this->version = BETTER_REDIRECTS_GF_VERSION;
             } else {
-                $this->version = '1.0.0';
+                $this->version = '1.1.0';
             }
     
             // Activate hooks
@@ -61,7 +61,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Register listeners for actions.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @return void
          */
         private function activate_actions()
@@ -75,7 +75,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Register listeners for filters.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @return void
          */
         private function activate_filters()
@@ -87,7 +87,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Retrieve the version number of the plugin.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @return string The version number of the plugin.
          */
         public function get_version()
@@ -98,7 +98,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Add plugin HTML to Gravity forms form confirmation settings.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @param mixed $ui_settings
          * @param mixed $confirmation
          * @param mixed $form
@@ -153,7 +153,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Modify form confirmation redirect URL, from plugin options array.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @param mixed $confirmation
          * @param mixed $form
          * @return mixed $confirmation The form confirmation.
@@ -215,7 +215,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Check if URL has changed, then update it within options.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @param int $post_id
          * @param mixed $post
          * @param bool $update
@@ -264,7 +264,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Enqueue admin scripts.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @return void
          */
         public function enqueue_scripts()
@@ -286,7 +286,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Ajax. Get Post ID from URL.
          *
-         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @since 1.1.0 Better Redirects for Gravity Forms
          * @return mixed $data
          */
         public function get_post_id_from_url()
