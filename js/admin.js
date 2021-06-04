@@ -12,8 +12,6 @@
         $('#betterRedirectsGf-field-value-post-url').length
     ) {
 
-        var textarea;
-
         function hideResults() {
             $('.js-c-betterRedirectsGf-result').addClass('gform-visually-hidden');
             showButton();
@@ -50,8 +48,7 @@
         }
 
         $(document.body).on('click', '.js-c-betterRedirectsGf-button-selectLink, .js-c-betterRedirectsGf-result', function () {
-            wpLink.open();
-            textarea = wpLink.textarea['value'];
+            wpLink.open('c-betterRedirectsGf-mce-dummy');
         });
         $(document.body).on('click', '.js-c-betterRedirectsGf-result-remove', function (event) {
             hideResults();
@@ -60,8 +57,6 @@
         });
 
         $(document.body).on('click', '#wp-link-submit', function () {
-            // override the wpLink.htmlUpdate() which has inputted the link in the available textarea
-            wpLink.textarea['value'] = textarea;
 
             // get url from wpLink
             var url, params;
