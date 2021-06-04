@@ -3,7 +3,7 @@
 /**
  * @wordpress-plugin
  * Plugin Name: Better Redirects for Gravity Forms
- * Description: Avoids 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
+ * Description: Avoid 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
  * Version: 1.0.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
@@ -112,12 +112,12 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
     
             $post_id  = rgar($confirmation, 'betterRedirectsGf-field-value-post-id');
             $post_url = rgar($confirmation, 'betterRedirectsGf-field-value-post-url');
-    
-            if (!empty(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-id']))) {
+
+            if (isset($_POST['_gform_setting_betterRedirectsGf-field-value-post-id'])) {
                 $post_id = rgpost('_gform_setting_betterRedirectsGf-field-value-post-id');
             }
     
-            if (!empty(sanitize_text_field($_POST['_gform_setting_betterRedirectsGf-field-value-post-url']))) {
+            if (isset($_POST['_gform_setting_betterRedirectsGf-field-value-post-url'])) {
                 $post_url = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
             }
     
@@ -128,7 +128,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                         <div class="gform-settings-field__header">
                             <label class="gform-settings-label">Better Redirect</label>
                         </div>
-                        <span class="gform-settings-description">If specified, this will override your <strong>Redirect Confirmation URL</strong> with the below URL.<br>So that anytime the URL changes, your redirect will never become a 404, ever, again.</span>
+                        <span class="gform-settings-description">If specified, this will override your <strong>Redirect Confirmation URL</strong> with the below URL.<br>So that anytime the URL changes, your redirect will never become a 404, ever, again. 🤩</span>
                         <div class="gform-settings-input__container">
                             <p>
                             <div class="gform-button c-betterRedirectsGf-result js-c-betterRedirectsGf-result gform-visually-hidden">
@@ -140,6 +140,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                             <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo esc_attr($post_url); ?>" _gform_setting="">
                             </p>
                             <a href="javascript:void(0);" class="gform_settings_button button js-c-betterRedirectsGf-button-selectLink">Select Link</a>
+                            <textarea name="" id="c-betterRedirectsGf-mce-dummy" style="display:none !important;"></textarea>
                         </div>
                     </div>
                 </td>
@@ -161,7 +162,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         {
             // vars
             $form_id         = (int) $form['id'];
-            $confirmation_id = (int) $confirmation['id'];
+            $confirmation_id = $confirmation['id'];
     
             // todo save values for later, until gform_confirmation_settings_fields filter issue can be resolved.
             // todo the issue is that newly appended confirmation type radio is not set as checked=checked.
@@ -297,7 +298,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 'post_id'       => 0,
            );
     
-            if (empty(sanitize_text_field($_POST['post_url']))) {
+            if (empty($_POST['post_url'])) {
                 $data['debug_message'] = __('post_url does not exist.', 'better-redirects-for-gravity-forms');
                 wp_send_json_error($data);
             }
