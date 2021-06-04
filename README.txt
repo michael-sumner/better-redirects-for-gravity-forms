@@ -89,3 +89,10 @@ Yes, please visit the [GitHub repository link](https://github.com/michael-sumner
 == Changelog ==
 
 Please visit the [GitHub repository link](https://github.com/michael-sumner/better-redirects-for-gravity-forms) for the changelog.
+
+== Screenshots ==
+
+1. Find your Better Redirects in the Gravity Form here.
+2. Let us set a Better Redirect for the specified Gravity form. Success! It successfully redirects!
+3. Changing the redirect URL later on, will automatically save it across all your confirmations, on all forms that actively contain it.
+4. If you remove the Better Redirect, your standard redirect will continue to function. This is useful if you want to use External link redirects.
