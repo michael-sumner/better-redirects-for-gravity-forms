@@ -80,7 +80,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
          */
         private function activate_filters()
         {
-            add_filter('gform_confirmation_ui_settings', array($this, 'confirmation_setting'), 10, 3);
+            add_filter('gform_confirmation_settings_fields', array($this, 'confirmation_setting'), 10, 3);
             add_filter('gform_pre_confirmation_save', array($this, 'confirmation_save'), 10, 2);
         }
     
@@ -98,17 +98,33 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Add plugin HTML to Gravity forms form confirmation settings.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
-         * @param mixed $ui_settings
+         * @since 1.0.0 Better Redirects for Gravity Forms
+         * @param mixed $fields
          * @param mixed $confirmation
          * @param mixed $form
-         * @return mixed $ui_settings The form UI settings.
+         * @return mixed $fields The form confirmation field UI settings.
          */
-        public function confirmation_setting($ui_settings, $confirmation, $form)
+        public function confirmation_setting( $fields, $confirmation, $form )
+        {
+            $fields[0]['fields'][] = array(
+                'title'    => esc_html__( 'Better Redirect', 'better-redirects-for-gravity-forms' ),
+                'type'     => 'custom',
+                'callback' => array( 'BetterRedirectsGF', 'meta_box_better_redirects' ),
+                'context'  => 'normal',
+
+                // for callback
+                'confirmation' => $confirmation,
+            );
+            return $fields;
+        }
+
+        public static function meta_box_better_redirects( $args, $metabox )
         {
             // vars
-            $post_id  = '';
-            $post_url = '';
+            $confirmation = '';
+            $post_id      = '';
+            $post_url     = '';
+            $confirmation = $args['confirmation'];
     
             $post_id  = rgar($confirmation, 'betterRedirectsGf-field-value-post-id');
             $post_url = rgar($confirmation, 'betterRedirectsGf-field-value-post-url');
@@ -120,24 +136,25 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
             if (isset($_POST['_gform_setting_betterRedirectsGf-field-value-post-url'])) {
                 $post_url = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
             }
-    
-            ob_start(); ?>
+
+            // Gravity Forms will upgrade this `tr` to the new UI, if available.
+            ?>
             <tr>
                 <td>
                     <div class="gform-settings-field">
                         <div class="gform-settings-field__header">
                             <label class="gform-settings-label">Better Redirect</label>
                         </div>
-                        <span class="gform-settings-description">If specified, this will override your <strong>Redirect Confirmation URL</strong> with the below URL.<br>So that anytime the URL changes, your redirect will never become a 404, ever, again. 🤩</span>
+                        <span class="gform-settings-description"><p>If specified, this will override your <strong>Redirect Confirmation URL</strong> with the below URL.<br>So that anytime the URL changes, your redirect will <strong>never become a 404, ever, again</strong>. 🤩</p><p>Make sure that <strong>Confirmation Type</strong> is set to <strong>Redirect</strong>.</p></span>
                         <div class="gform-settings-input__container">
                             <p>
-                            <div class="gform-button c-betterRedirectsGf-result js-c-betterRedirectsGf-result gform-visually-hidden">
-                                <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--create"></span>
-                                <span class="c-betterRedirectsGf-result__input"><span>Your redirect is now set to <strong>ID <span class="js-c-betterRedirectsGf-result-id"><?php echo esc_html($post_id); ?></span></strong>:&nbsp;</span><a href="" class="js-c-betterRedirectsGf-result-url" target="_blank"><?php echo esc_url($post_url); ?></a></span>
-                                <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--delete js-c-betterRedirectsGf-result-remove"></span>
-                            </div>
-                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-id" id="betterRedirectsGf-field-value-post-id" value="<?php echo esc_attr($post_id); ?>" _gform_setting="">
-                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo esc_attr($post_url); ?>" _gform_setting="">
+                                <div class="gform-button c-betterRedirectsGf-result js-c-betterRedirectsGf-result gform-visually-hidden">
+                                    <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--create"></span>
+                                    <span class="c-betterRedirectsGf-result__input"><span>Your redirect is now set to <strong>ID <span class="js-c-betterRedirectsGf-result-id"><?php echo esc_html($post_id); ?></span></strong>:&nbsp;</span><a href="" class="js-c-betterRedirectsGf-result-url" target="_blank"><?php echo esc_url($post_url); ?></a></span>
+                                    <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--delete js-c-betterRedirectsGf-result-remove"></span>
+                                </div>
+                                <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-id" id="betterRedirectsGf-field-value-post-id" value="<?php echo esc_attr($post_id); ?>" _gform_setting="">
+                                <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo esc_attr($post_url); ?>" _gform_setting="">
                             </p>
                             <a href="javascript:void(0);" class="gform_settings_button button js-c-betterRedirectsGf-button-selectLink">Select Link</a>
                             <textarea name="" id="c-betterRedirectsGf-mce-dummy" style="display:none !important;"></textarea>
@@ -146,8 +163,6 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 </td>
             </tr>
             <?php
-            $ui_settings['better_redirects_gf'] = ob_get_clean();
-            return $ui_settings;
         }
     
         /**
