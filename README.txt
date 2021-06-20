@@ -17,6 +17,8 @@ Avoids 404 errors in your form confirmation redirects. Specify your confirmation
 
 #### Zero-maintenance form confirmation redirect URLs
 
+https://www.youtube.com/watch?v=I_YjONB65go
+
 #### Simple setup
 
 * Set your form to use a confirmation redirect within Gravity Forms, and specify the URL within the **Better Redirect** section whilst editing your form confirmation.
