@@ -4,17 +4,17 @@
  * @wordpress-plugin
  * Plugin Name: Better Redirects for Gravity Forms
  * Description: Avoid 404 errors in your form confirmation redirects. Specify your confirmation redirect URL with this plugin, and your confirmation redirects will never 404 again.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
  * Author: Michael Bryan Sumner
- * Author URI: https://www.micsumner.com/
+ * Author URI: https://smnr.co/better-redirects-for-gravity-forms
  * License: GPL-2.0+
  * Text Domain: better-redirects-for-gravity-forms
  * Domain Path: /languages
  *
- * @link https://www.micsumner.com/
- * @since 1.1.0
+ * @link https://smnr.co/better-redirects-for-gravity-forms
+ * @since 1.2.0
  * @package BetterRedirectsGF
  */
 
@@ -23,7 +23,7 @@ if (! defined('WPINC')) {
     die('Hey there...');
 }
 
-define('BETTER_REDIRECTS_GF_VERSION', '1.1.0');
+define('BETTER_REDIRECTS_GF_VERSION', '1.2.0');
 
 if ( ! class_exists( 'BetterRedirectsGF' ) ) {
     class BetterRedirectsGF
@@ -31,7 +31,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * The current version of the plugin.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @access protected
          * @var string $version The current version of the plugin.
          */
@@ -43,14 +43,14 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
          * Set the plugin version that can be used throughout the plugin.
          * Set the hooks.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          */
         public function __construct()
         {
             if (defined('BETTER_REDIRECTS_GF_VERSION')) {
                 $this->version = BETTER_REDIRECTS_GF_VERSION;
             } else {
-                $this->version = '1.1.0';
+                $this->version = '1.2.0';
             }
     
             // Activate hooks
@@ -61,7 +61,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Register listeners for actions.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @return void
          */
         private function activate_actions()
@@ -75,19 +75,19 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Register listeners for filters.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @return void
          */
         private function activate_filters()
         {
-            add_filter('gform_confirmation_ui_settings', array($this, 'confirmation_setting'), 10, 3);
+            add_filter('gform_confirmation_settings_fields', array($this, 'confirmation_setting'), 10, 3);
             add_filter('gform_pre_confirmation_save', array($this, 'confirmation_save'), 10, 2);
         }
     
         /**
          * Retrieve the version number of the plugin.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @return string The version number of the plugin.
          */
         public function get_version()
@@ -98,17 +98,33 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Add plugin HTML to Gravity forms form confirmation settings.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
-         * @param mixed $ui_settings
+         * @since 1.2.0 Better Redirects for Gravity Forms
+         * @param mixed $fields
          * @param mixed $confirmation
          * @param mixed $form
-         * @return mixed $ui_settings The form UI settings.
+         * @return mixed $fields The form confirmation field UI settings.
          */
-        public function confirmation_setting($ui_settings, $confirmation, $form)
+        public function confirmation_setting( $fields, $confirmation, $form )
+        {
+            $fields[0]['fields'][] = array(
+                'title'    => esc_html__( 'Better Redirect', 'better-redirects-for-gravity-forms' ),
+                'type'     => 'custom',
+                'callback' => array( 'BetterRedirectsGF', 'meta_box_better_redirects' ),
+                'context'  => 'normal',
+
+                // for callback
+                'confirmation' => $confirmation,
+            );
+            return $fields;
+        }
+
+        public static function meta_box_better_redirects( $args, $metabox )
         {
             // vars
-            $post_id  = '';
-            $post_url = '';
+            $confirmation = '';
+            $post_id      = '';
+            $post_url     = '';
+            $confirmation = $args['confirmation'];
     
             $post_id  = rgar($confirmation, 'betterRedirectsGf-field-value-post-id');
             $post_url = rgar($confirmation, 'betterRedirectsGf-field-value-post-url');
@@ -120,24 +136,25 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
             if (isset($_POST['_gform_setting_betterRedirectsGf-field-value-post-url'])) {
                 $post_url = rgpost('_gform_setting_betterRedirectsGf-field-value-post-url');
             }
-    
-            ob_start(); ?>
+
+            // Gravity Forms will upgrade this `tr` to the new UI, if available.
+            ?>
             <tr>
                 <td>
                     <div class="gform-settings-field">
                         <div class="gform-settings-field__header">
                             <label class="gform-settings-label">Better Redirect</label>
                         </div>
-                        <span class="gform-settings-description">If specified, this will override your <strong>Redirect Confirmation URL</strong> with the below URL.<br>So that anytime the URL changes, your redirect will never become a 404, ever, again. 🤩</span>
+                        <span class="gform-settings-description"><p>If specified, this will override your <strong>Redirect Confirmation URL</strong> with the below URL.<br>So that anytime the URL changes, your redirect will <strong>never become a 404, ever, again</strong>. 🤩</p><p>Make sure that <strong>Confirmation Type</strong> is set to <strong>Redirect</strong>.</p></span>
                         <div class="gform-settings-input__container">
                             <p>
-                            <div class="gform-button c-betterRedirectsGf-result js-c-betterRedirectsGf-result gform-visually-hidden">
-                                <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--create"></span>
-                                <span class="c-betterRedirectsGf-result__input"><span>Your redirect is now set to <strong>ID <span class="js-c-betterRedirectsGf-result-id"><?php echo esc_html($post_id); ?></span></strong>:&nbsp;</span><a href="" class="js-c-betterRedirectsGf-result-url" target="_blank"><?php echo esc_url($post_url); ?></a></span>
-                                <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--delete js-c-betterRedirectsGf-result-remove"></span>
-                            </div>
-                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-id" id="betterRedirectsGf-field-value-post-id" value="<?php echo esc_attr($post_id); ?>" _gform_setting="">
-                            <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo esc_attr($post_url); ?>" _gform_setting="">
+                                <div class="gform-button c-betterRedirectsGf-result js-c-betterRedirectsGf-result gform-visually-hidden">
+                                    <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--create"></span>
+                                    <span class="c-betterRedirectsGf-result__input"><span>Your redirect is now set to <strong>ID <span class="js-c-betterRedirectsGf-result-id"><?php echo esc_html($post_id); ?></span></strong>:&nbsp;</span><a href="" class="js-c-betterRedirectsGf-result-url" target="_blank"><?php echo esc_url($post_url); ?></a></span>
+                                    <span class="c-betterRedirectsGf-result__button button gform-button__icon gform-icon gform-icon--delete js-c-betterRedirectsGf-result-remove"></span>
+                                </div>
+                                <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-id" id="betterRedirectsGf-field-value-post-id" value="<?php echo esc_attr($post_id); ?>" _gform_setting="">
+                                <input type="hidden" name="_gform_setting_betterRedirectsGf-field-value-post-url" id="betterRedirectsGf-field-value-post-url" value="<?php echo esc_attr($post_url); ?>" _gform_setting="">
                             </p>
                             <a href="javascript:void(0);" class="gform_settings_button button js-c-betterRedirectsGf-button-selectLink">Select Link</a>
                             <textarea name="" id="c-betterRedirectsGf-mce-dummy" style="display:none !important;"></textarea>
@@ -146,14 +163,12 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
                 </td>
             </tr>
             <?php
-            $ui_settings['better_redirects_gf'] = ob_get_clean();
-            return $ui_settings;
         }
     
         /**
          * Modify form confirmation redirect URL, from plugin options array.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @param mixed $confirmation
          * @param mixed $form
          * @return mixed $confirmation The form confirmation.
@@ -215,7 +230,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Check if URL has changed, then update it within options.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @param int $post_id
          * @param mixed $post
          * @param bool $update
@@ -264,7 +279,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Enqueue admin scripts.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @return void
          */
         public function enqueue_scripts()
@@ -286,7 +301,7 @@ if ( ! class_exists( 'BetterRedirectsGF' ) ) {
         /**
          * Ajax. Get Post ID from URL.
          *
-         * @since 1.1.0 Better Redirects for Gravity Forms
+         * @since 1.2.0 Better Redirects for Gravity Forms
          * @return mixed $data
          */
         public function get_post_id_from_url()
